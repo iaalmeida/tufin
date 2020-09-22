@@ -3,6 +3,7 @@ Ansible stuff for Tufin: Firewall Management &amp; Network Security Policy Softw
 
 # Files
 inventory: list of Tufin hosts
+
 upgrade.yml: ansible playbook with instructions for upgrade Tufin hosts
 
 # Usage
