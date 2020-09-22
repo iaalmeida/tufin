@@ -1,2 +1,2 @@
 # tufin
-stuff for Tufin: Firewall Management &amp; Network Security Policy Software
+ansible stuff for Tufin: Firewall Management &amp; Network Security Policy Software
