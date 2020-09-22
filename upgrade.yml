@@ -1,0 +1,44 @@
+---
+- name: UPGRADE TUFIN INFRASTRUCTURE
+  gather_facts: no
+  remote_user: root
+  connection: paramiko
+  hosts: all
+  vars:
+    folder: ~/src/
+    compressed_file: tos-R20-1-HF1-178277-final-release.run.tgz
+    
+
+  tasks:
+    - name: Create destinetion folder if it not exists
+      file:
+       path: "{{ folder }}"
+       state: directory
+       mode: "0755"
+
+    - name: Copy compressed file to Tufin host 
+      copy:
+        src: "{{ folder + compressed_file }}"
+        dest: "{{ folder }}"
+        force: no
+
+    - name: Register upgrade filename
+      command: basename {{ compressed_file }} .tgz
+      register: file
+    - set_fact:
+        upgrade_file: "{{ file.stdout }}"
+
+    - name: Untar compressed file
+      command: tar xfz {{ compressed_file }}
+      args:
+        chdir: "{{ folder }}"
+        creates: "{{ file }}"
+        warn: false
+
+    - name: Screen upgrade command
+      command: |
+        screen -S Upgrade -L -m /bin/sh -c '{{ upgrade_file }} > upgrade-`date +%Y%m%d.out`'
+        sleep 1
+      args:
+        chdir: "{{ folder }}"
+
